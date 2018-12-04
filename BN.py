@@ -31,15 +31,15 @@ class BN():
         opts = [0]*getOpt(evid)
         pn = 0
         pnn = 0
-        for i in range(getOpt(evid)):
+        for i in range(2**getOpt(evid)):
             print(opts)
             print(evid)
             newEvid = combineEvids(evid, opts)
 
-
-            pn += self.computeJointProb(forceEvidT(newEvid))
-            pnn += self.computeJointProb(forceEvidF(newEvid))
-            opts = addLst(opts)
+            pn += self.computeJointProb(forceEvidTF(newEvid, 1))
+            pnn += self.computeJointProb(forceEvidTF(newEvid, 0))
+            if i < 2**getOpt(evid) - 1:
+                opts = addLst(opts)
 
 
         return pn / (pn + pnn)
@@ -59,27 +59,14 @@ def getOpt(evid):
             cont+=1
     return cont
 
-def forceEvidF(evid):
+def forceEvidTF(evid, num):
     evid2 = []
     for i in evid:
         if i == -1:
-            evid2.append(0)
+            evid2.append(num)
         else:
             evid2.append(i)
     return evid2
-
-
-def forceEvidT(evid):
-    evid2 = []
-    for i in evid:
-        if i == -1:
-            evid2.append(1)
-        else:
-            evid2.append(i)
-    return evid2
-
-
-
 
 def combineEvids(evid, option):
     e = 0
@@ -92,14 +79,16 @@ def combineEvids(evid, option):
             evid2.append(evid[i])
     return evid2
 
+
 def addLst(l1):
+    r = len(l1)
     st1 = '0b'
-    out = ''
+    out = [0]*r
     for i in l1:
         st1 += str(i)
     num1 = int(st1,2)
     num1+=1
     st2 = bin(num1)
-    for i in st2[2:]:
-        out += i
-    return list(out)
+    for i in range(-len(st2[2:]), 0, 1):
+        out[i] = int(st2[i])
+    return out
