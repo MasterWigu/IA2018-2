@@ -28,20 +28,16 @@ class BN():
         self.prob = prob
 
     def computePostProb(self, evid):
-        opts = [0]*getOpt(evid)
+        opts = [0]*evid.count([])
         pn = 0
         pnn = 0
-        for i in range(2**getOpt(evid)):
-            print(opts)
-            print(evid)
-            newEvid = combineEvids(evid, opts)
-
-            pn += self.computeJointProb(forceEvidTF(newEvid, 1))
-            pnn += self.computeJointProb(forceEvidTF(newEvid, 0))
-            if i < 2**getOpt(evid) - 1:
+        for i in range(2**evid.count([])):
+            optsTemp = opts.copy()
+            newEvid = [evid[i] if evid[i] != [] else optsTemp.pop() for i in range(len(evid))]
+            pn += self.computeJointProb([i if i != -1 else 1 for i in newEvid])
+            pnn += self.computeJointProb([i if i != -1 else 0 for i in newEvid])
+            if i < 2**evid.count([]) - 1:
                 opts = addLst(opts)
-
-
         return pn / (pn + pnn)
         
         
@@ -50,35 +46,6 @@ class BN():
         for num in range(len(self.prob)):
             prob1 *= self.prob[num].computeProb(evid)[evid[num]]
         return prob1
-
-
-def getOpt(evid):
-    cont = 0
-    for i in evid:
-        if i == []:
-            cont+=1
-    return cont
-
-def forceEvidTF(evid, num):
-    evid2 = []
-    for i in evid:
-        if i == -1:
-            evid2.append(num)
-        else:
-            evid2.append(i)
-    return evid2
-
-def combineEvids(evid, option):
-    e = 0
-    evid2 = []
-    for i in range(len(evid)):
-        if evid[i] == []:
-            evid2.append(option[e])
-            e +=1
-        else:
-            evid2.append(evid[i])
-    return evid2
-
 
 def addLst(l1):
     r = len(l1)
