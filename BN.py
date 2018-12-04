@@ -28,8 +28,21 @@ class BN():
         self.prob = prob
 
     def computePostProb(self, evid):
-        pass
-        return 0
+        opts = [0]*getOpt(evid)
+        pn = 0
+        pnn = 0
+        for i in range(getOpt(evid)):
+            print(opts)
+            print(evid)
+            newEvid = combineEvids(evid, opts)
+
+
+            pn += self.computeJointProb(forceEvidT(newEvid))
+            pnn += self.computeJointProb(forceEvidF(newEvid))
+            opts = addLst(opts)
+
+
+        return pn / (pn + pnn)
         
         
     def computeJointProb(self, evid):
@@ -38,6 +51,46 @@ class BN():
             prob1 *= self.prob[num].computeProb(evid)[evid[num]]
         return prob1
 
+
+def getOpt(evid):
+    cont = 0
+    for i in evid:
+        if i == []:
+            cont+=1
+    return cont
+
+def forceEvidF(evid):
+    evid2 = []
+    for i in evid:
+        if i == -1:
+            evid2.append(0)
+        else:
+            evid2.append(i)
+    return evid2
+
+
+def forceEvidT(evid):
+    evid2 = []
+    for i in evid:
+        if i == -1:
+            evid2.append(1)
+        else:
+            evid2.append(i)
+    return evid2
+
+
+
+
+def combineEvids(evid, option):
+    e = 0
+    evid2 = []
+    for i in range(len(evid)):
+        if evid[i] == []:
+            evid2.append(option[e])
+            e +=1
+        else:
+            evid2.append(evid[i])
+    return evid2
 
 def addLst(l1):
     st1 = '0b'
