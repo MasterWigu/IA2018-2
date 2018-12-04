@@ -13,13 +13,13 @@ class Node():
         self.parents = parents
     
     def computeProb(self, evid):
-        if (len(self.parents) == 2):
-            prob1 = self.prob[evid[self.parents[0]]][evid[self.parents[1]]]
-        elif (len(self.parents) == 1):
-            prob1 = self.prob[evid[self.parents[0]]]
-        else:
-            prob1 = self.prob[0]
-        return [1-prob1, prob1]
+        def computeProbAux(parTemp, evid, probs):
+            if parTemp == []:
+                return probs
+            else:
+                return computeProbAux(parTemp[1:] ,evid, probs[evid[parTemp[0]]] )
+        probT = computeProbAux(self.parents, evid, self.prob)
+        return (1-probT, probT)
 
             
 class BN():

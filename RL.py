@@ -95,7 +95,7 @@ class finiteMDP:
     
     def Q2pol(self, Q, eta=5):
         # implementar esta funcao
-        return np.exp(eta*Q)/np.dot(np.exp(eta*Q),np.array([[1,1],[1,1]]))
+        return np.exp(eta*Q)/np.dot(np.exp(eta*Q),np.ones([self.nA, self.nA])
 
 
             
