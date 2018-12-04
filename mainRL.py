@@ -36,7 +36,6 @@ absorv[[0,6]]=1
 fmdp = RL.finiteMDP(7,2,0.9,Pl,Rl,absorv)
 
 J,traj = fmdp.runPolicy( 1,3,poltype = "exploration")
-print(traj)
 
 data = np.load("Q1.npz")
 Qr = fmdp.traces2Q(traj)

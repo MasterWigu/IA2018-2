@@ -78,15 +78,12 @@ class finiteMDP:
     
     def policy(self, x, poltype = 'exploration', par = []):
         # implementar esta funcao
-        
+        v = self.VI()
         if poltype == 'exploitation':
-            a =np.argmax(self.VI()[1][x])
-            return int(a)
+            return int(np.argmax(v[1][x]))
 
             
         elif poltype == 'exploration':
-            a = self.VI()[0][x]
-            
             return np.random.randint(0,self.nA)
 
     def Q2pol(self, Q, eta=5):
