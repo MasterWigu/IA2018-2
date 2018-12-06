@@ -69,24 +69,21 @@ class finiteMDP:
                 state = int(line[0])
                 action = int(line[1])
                 nextState = int(line[2])
-                reward = int(line[3])
+                reward = line[3]
                 self.Q[state, action] = (1-self.alpha)*self.Q[state, action] + self.alpha*(reward + self.gamma*np.max(self.Q[nextState,:]))
             if np.allclose(previous, self.Q):
                 break
-
         return self.Q
     
     def policy(self, x, poltype = 'exploration', par = []):
         # implementar esta funcao
-        v = self.VI()
         if poltype == 'exploitation':
-            return int(np.argmax(v[1][x]))
-
+            return int(np.argmax(par[x]))
             
         elif poltype == 'exploration':
             return np.random.randint(0,self.nA)
 
     def Q2pol(self, Q, eta=5):
         # implementar esta funcao
-        return np.exp(eta*Q)/np.dot(np.exp(eta*Q),np.ones([self.nA, self.nA]))
+        return np.exp(eta*Q)/np.dot(np.exp(eta*Q),np.ones([1, 1]))
 
